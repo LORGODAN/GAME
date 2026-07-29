@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neon Rush</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      overflow: hidden; font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at 50% 15%, #29356d 0, #10152e 35%, #070914 100%);
+    }
+    .game-shell { width: min(94vw, 480px); position: relative; }
+    canvas {
+      width: 100%; height: auto; display: block; border: 4px solid #62e8ff;
+      border-radius: 18px; background: #17202b; box-shadow: 0 0 18px #39d9ff, 0 0 60px #2157d2;
+      touch-action: none;
+    }
+    .hud { position: absolute; inset: 15px 16px auto; display: flex; justify-content: space-between; pointer-events: none; }
+    .stat { color: #fff; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-shadow: 0 2px 4px #000; }
+    .stat b { display: block; margin-top: 3px; color: #6ff2ff; font-size: 23px; letter-spacing: 0; }
+    #overlay {
+      position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+      padding: 32px; border-radius: 15px; background: rgba(4, 7, 18, .58); backdrop-filter: blur(3px);
+    }
+    #panel { max-width: 310px; }
+    h1 { margin: 0 0 10px; color: #fff; font-size: 42px; font-style: italic; letter-spacing: 1px; text-shadow: 0 0 15px #ff3f81; }
+    p { margin: 0 0 20px; color: #d7e5ff; line-height: 1.5; }
+    button {
+      border: 0; border-radius: 999px; padding: 13px 27px; cursor: pointer; color: #071020;
+      background: linear-gradient(135deg, #6ff4ff, #879dff); font-weight: 800; letter-spacing: .7px;
+      box-shadow: 0 5px 20px #43d7ff88; transition: transform .15s;
+    }
+    button:hover { transform: scale(1.05); }
+    .controls { margin-top: 12px; color: #aab7d9; font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main class="game-shell">
+    <canvas id="game" width="480" height="720" aria-label="Neon Rush racing game"></canvas>
+    <div class="hud"><div class="stat">SCORE<b id="score">0</b></div><div class="stat" style="text-align:right">SPEED<b id="speed">1.0x</b></div></div>
+    <div id="overlay"><div id="panel"><h1>NEON RUSH</h1><p>Weave through night traffic and stay on the road.</p><button id="start">START RACE</button><div class="controls">Use ← → or A / D to steer<br>Touch or drag on mobile</div></div></div>
+  </main>
+  <script>
+    const canvas = document.getElementById('game'), ctx = canvas.getContext('2d');
+    const scoreEl = document.getElementById('score'), speedEl = document.getElementById('speed');
+    const overlay = document.getElementById('overlay'), panel = document.getElementById('panel');
+    const W = canvas.width, H = canvas.height, road = { x: 70, w: 340 };
+    let running = false, score = 0, speed = 6, last = 0, stripeOffset = 0, spawnTimer = 0;
+    let keys = {}, cars = [], sparks = [];
+    const player = { x: W / 2 - 23, y: H - 135, w: 46, h: 88, tilt: 0 };
+    const colors = ['#ff4d7e','#ffc34d','#a66bff','#5eeaff','#65e585','#ff7dca'];
+
+    function roundedRect(x,y,w,h,r) { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); }
+    function drawCar(c, isPlayer = false) {
+      ctx.save(); ctx.translate(c.x + c.w/2, c.y + c.h/2); ctx.rotate(c.tilt || 0);
+      ctx.shadowBlur = isPlayer ? 20 : 8; ctx.shadowColor = c.color || '#53edff';
+      roundedRect(-c.w/2, -c.h/2, c.w, c.h, 10); ctx.fillStyle = c.color || '#34dfff'; ctx.fill();
+      ctx.shadowBlur = 0;
+      roundedRect(-c.w*.31, -c.h*.28, c.w*.62, c.h*.36, 6); ctx.fillStyle = '#17243e'; ctx.fill();
+      ctx.fillStyle = '#c7f7ff'; ctx.fillRect(-c.w*.29, -c.h*.33, c.w*.58, 6);
+      ctx.fillStyle = '#ffeff4'; ctx.fillRect(-c.w*.32, c.h*.36, 9, 7); ctx.fillRect(c.w*.12, c.h*.36, 9, 7);
+      ctx.fillStyle = '#161a24'; ctx.fillRect(-c.w*.57, -c.h*.30, 8, c.h*.22); ctx.fillRect(c.w*.40, -c.h*.30, 8, c.h*.22); ctx.fillRect(-c.w*.57, c.h*.12, 8, c.h*.22); ctx.fillRect(c.w*.40, c.h*.12, 8, c.h*.22);
+      ctx.restore();
+    }
+    function drawRoad() {
+      ctx.fillStyle = '#111925'; ctx.fillRect(0,0,W,H);
+      ctx.fillStyle = '#285f49'; ctx.fillRect(0,0,road.x,H); ctx.fillRect(road.x+road.w,0,W-road.x-road.w,H);
+      for (let y = -40 + (stripeOffset % 48); y < H; y += 48) { ctx.fillStyle = '#d6e3e1'; ctx.fillRect(road.x-6,y,6,26); ctx.fillRect(road.x+road.w,y,6,26); }
+      ctx.fillStyle = '#303948'; ctx.fillRect(road.x,0,road.w,H);
+      for (let lane = 1; lane < 3; lane++) for (let y = -54 + (stripeOffset % 82); y < H; y += 82) { ctx.fillStyle = '#edf5e8'; ctx.fillRect(road.x + road.w*lane/3 - 4,y,8,44); }
+      ctx.fillStyle = '#ffdf5d'; ctx.fillRect(road.x + 4,0,4,H); ctx.fillRect(road.x+road.w-8,0,4,H);
+    }
+    function spawnCar() {
+      const lanes = [road.x+20, road.x+road.w/3+18, road.x+road.w*2/3+16];
+      const occupied = cars.filter(c => c.y < 170).map(c => c.x);
+      const choices = lanes.filter(x => !occupied.some(o => Math.abs(o-x)<25));
+      if (choices.length) cars.push({x: choices[Math.floor(Math.random()*choices.length)], y:-100, w:44, h:84, color:colors[Math.floor(Math.random()*colors.length)], tilt:0, drift:(Math.random()-.5)*.35});
+    }
+    function collide(a,b) { return a.x+7 < b.x+b.w-7 && a.x+a.w-7 > b.x+7 && a.y+9 < b.y+b.h-9 && a.y+a.h-9 > b.y+9; }
+    function crash() {
+      running = false;
+      for(let i=0;i<36;i++) sparks.push({x:player.x+player.w/2,y:player.y+player.h/2,vx:(Math.random()-.5)*12,vy:(Math.random()-.5)*12,life:36});
+      panel.innerHTML = `<h1>CRASHED!</h1><p>Your final score: <strong>${Math.floor(score)}</strong></p><button id="start">RACE AGAIN</button><div class="controls">Use ← → or A / D to steer</div>`;
+      overlay.style.display = 'grid'; document.getElementById('start').onclick = start;
+    }
+    function update(dt) {
+      const factor = dt / 16.67, move = 7.2 * factor;
+      if(keys.ArrowLeft || keys.a) player.x -= move;
+      if(keys.ArrowRight || keys.d) player.x += move;
+      player.x = Math.max(road.x+8, Math.min(road.x+road.w-player.w-8, player.x));
+      player.tilt = (keys.ArrowLeft || keys.a ? -.10 : keys.ArrowRight || keys.d ? .10 : 0);
+      speed = Math.min(15, 6 + score/460); stripeOffset += speed * factor;
+      spawnTimer += dt; if(spawnTimer > Math.max(410, 960 - score*.3)) { spawnCar(); spawnTimer=0; }
+      cars.forEach(c => { c.y += speed*factor; c.x += c.drift*factor; }); cars = cars.filter(c => c.y < H+110);
+      if(cars.some(c => collide(player,c))) crash();
+      score += speed * factor * .12; scoreEl.textContent = Math.floor(score); speedEl.textContent = (speed/6).toFixed(1)+'x';
+    }
+    function render() {
+      drawRoad(); cars.forEach(c => drawCar(c)); drawCar({...player,color:'#38e7ff'},true);
+      sparks.forEach(s => { ctx.fillStyle='#fff06a'; ctx.fillRect(s.x,s.y,4,4); });
+    }
+    function loop(t) {
+      const dt = Math.min(40, t-last || 16); last=t;
+      if(running) update(dt);
+      if(!running && sparks.length) sparks = sparks.filter(s => { s.x+=s.vx; s.y+=s.vy; s.vy+=.25; return --s.life>0; });
+      render(); requestAnimationFrame(loop);
+    }
+    function start() { score=0; speed=6; cars=[]; sparks=[]; player.x=W/2-23; running=true; overlay.style.display='none'; }
+    window.addEventListener('keydown', e => { if(['ArrowLeft','ArrowRight','a','d'].includes(e.key)) { keys[e.key]=true; e.preventDefault(); } });
+    window.addEventListener('keyup', e => keys[e.key]=false);
+    function steer(e) { const r=canvas.getBoundingClientRect(); player.x = ((e.clientX-r.left)/r.width)*W-player.w/2; }
+    canvas.addEventListener('pointerdown', e => { if(running) steer(e); }); canvas.addEventListener('pointermove', e => { if(running && e.buttons) steer(e); });
+    document.getElementById('start').onclick=start; requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
