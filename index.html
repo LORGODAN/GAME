@@ -4,10 +4,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Techninja: Mobile Racer</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;min-height:100vh;display:grid;place-items:center;overflow:hidden;background:#070a17;font-family:Arial,sans-serif;color:#fff}#wrap{position:relative;width:min(100vw,500px);height:min(100vh,850px);overflow:hidden;background:#101c2e}canvas{display:block;width:100%;height:100%;touch-action:none}.hud{position:absolute;inset:12px 14px auto;display:flex;justify-content:space-between;gap:8px;pointer-events:none;text-shadow:0 2px 4px #000}.stat{font-size:10px;font-weight:bold;letter-spacing:1.2px}.stat b{display:block;font-size:21px;color:#69f4ff;letter-spacing:0}.barbox{position:absolute;left:50%;bottom:105px;transform:translateX(-50%);width:120px;text-align:center;font-size:9px;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 3px #000}.bar{height:9px;border:1px solid #fff;border-radius:10px;margin-top:4px;overflow:hidden;background:#13172b}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#6ef4ff,#b068ff);transition:width .1s}.coins{position:absolute;top:70px;left:50%;transform:translateX(-50%);font-weight:bold;color:#ffdf57;text-shadow:0 2px 3px #000}.topbtn{position:absolute;top:12px;left:50%;transform:translateX(-50%);border:1px solid #a6faff;background:#132b50cc;color:#fff;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:bold}.controls{position:absolute;inset:auto 0 14px;display:flex;justify-content:space-between;padding:0 18px;pointer-events:none}.control{pointer-events:auto;width:78px;height:68px;border:2px solid #96f7ff99;border-radius:18px;background:#142948aa;color:#fff;font-size:28px;font-weight:bold;box-shadow:0 0 16px #41dfff55}.control:active{transform:scale(.94);background:#2b6595}.boost{width:82px;border-color:#d09aff;background:#512665aa;font-size:13px;letter-spacing:1px}#overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(#080c20bb,#090716d9);z-index:4}#panel{max-width:365px;width:100%}h1{font-style:italic;font-size:38px;margin:0 0 7px;color:#fff;text-shadow:0 0 18px #ff3c87}p{color:#d7e4ff;line-height:1.4;margin:7px 0 18px}.choices{display:flex;gap:8px;justify-content:center;margin:12px 0}.choice{border:2px solid #ffffff55;border-radius:12px;padding:9px 6px;min-width:92px;background:#172440;color:#fff;font-weight:bold}.choice.selected{border-color:#6cf3ff;box-shadow:0 0 15px #36dcff77}.choice span{display:block;font-size:11px;color:#a9badf;margin-top:5px}button.main{border:0;border-radius:30px;padding:14px 26px;background:linear-gradient(135deg,#72f5ff,#9b8cff);font-weight:900;letter-spacing:.6px;color:#071120;font-size:14px}.small{font-size:11px;color:#a9badf;margin-top:14px}.credit{margin-top:26px;color:#6ff4ff;font-size:12px;font-weight:bold;letter-spacing:.7px;text-shadow:0 0 8px #1ad8ff}@media(max-height:680px){.barbox{bottom:84px}.controls{bottom:8px}.control{height:55px;width:67px}h1{font-size:31px}.choices{margin:7px 0}.choice{padding:6px}.credit{margin-top:14px}}
-/* The remaining boost control stays centered in every layout. */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;min-height:100vh;display:grid;place-items:center;overflow:hidden;background:#070a17;font-family:Arial,sans-serif;color:#fff}#wrap{position:relative;width:min(100vw,500px);height:min(100vh,850px);overflow:hidden;background:#101c2e}canvas{display:block;width:100%;height:100%;touch-action:none}.hud{position:absolute;inset:12px 14px auto;display:flex;justify-content:space-between;gap:8px;pointer-events:none;text-shadow:0 2px 4px #000}.stat{font-size:10px;font-weight:bold;letter-spacing:1.2px}.stat b{display:block;font-size:21px;color:#69f4ff;letter-spacing:0}.barbox{position:absolute;left:50%;bottom:105px;transform:translateX(-50%);width:120px;text-align:center;font-size:9px;font-weight:bold;letter-spacing:1px;text-shadow:0 1px 3px #000}.bar{height:9px;border:1px solid #fff;border-radius:10px;margin-top:4px;overflow:hidden;background:#13172b}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#6ef4ff,#b068ff);transition:width .1s}.coins{position:absolute;top:70px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;font-weight:bold;color:#ffdf57;text-shadow:0 2px 3px #000;pointer-events:none}.comboTag{display:none;color:#6ef4ff;font-size:11px;background:#132b50cc;border:1px solid #6ef4ff88;border-radius:10px;padding:2px 8px}.statusRow{position:absolute;top:96px;left:50%;transform:translateX(-50%);display:flex;gap:6px;font-size:10px;font-weight:bold;pointer-events:none}.statusRow span{background:#132b50cc;border:1px solid #6ef4ff88;border-radius:10px;padding:3px 8px;display:none}#toast{position:absolute;top:128px;left:50%;transform:translateX(-50%);background:#132b50dd;border:1px solid #6ef4ff;border-radius:14px;padding:8px 18px;font-weight:bold;font-size:12px;letter-spacing:1px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;text-shadow:0 2px 4px #000;z-index:3;white-space:nowrap}#toast.show{opacity:1;transform:translateX(-50%) translateY(6px)}.topbtn{position:absolute;top:12px;left:50%;transform:translateX(-50%);border:1px solid #a6faff;background:#132b50cc;color:#fff;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:bold}.controls{position:absolute;inset:auto 0 14px;display:flex;justify-content:center;padding:0 18px;pointer-events:none}.control{pointer-events:auto;width:78px;height:68px;border:2px solid #96f7ff99;border-radius:18px;background:#142948aa;color:#fff;font-size:28px;font-weight:bold;box-shadow:0 0 16px #41dfff55}.control:active{transform:scale(.94);background:#2b6595}.boost{width:82px;border-color:#d09aff;background:#512665aa;font-size:13px;letter-spacing:1px}#overlay{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(#080c20bb,#090716d9);z-index:4}#panel{max-width:365px;width:100%}h1{font-style:italic;font-size:38px;margin:0 0 7px;color:#fff;text-shadow:0 0 18px #ff3c87}p{color:#d7e4ff;line-height:1.4;margin:7px 0 18px}.choices{display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap}.choice{border:2px solid #ffffff55;border-radius:12px;padding:9px 6px;min-width:92px;background:#172440;color:#fff;font-weight:bold}.choice.selected{border-color:#6cf3ff;box-shadow:0 0 15px #36dcff77}.choice span{display:block;font-size:11px;color:#a9badf;margin-top:5px}button.main{border:0;border-radius:30px;padding:14px 26px;background:linear-gradient(135deg,#72f5ff,#9b8cff);font-weight:900;letter-spacing:.6px;color:#071120;font-size:14px}.small{font-size:11px;color:#a9badf;margin-top:14px}.credit{margin-top:26px;color:#6ff4ff;font-size:12px;font-weight:bold;letter-spacing:.7px;text-shadow:0 0 8px #1ad8ff}@media(max-height:680px){.barbox{bottom:84px}.controls{bottom:8px}.control{height:55px;width:67px}h1{font-size:31px}.choices{margin:7px 0}.choice{padding:6px}.credit{margin-top:14px}}
 .controls{justify-content:center}
-/* Phone-browser layout: keep the buttons within the visible viewport and above the home indicator. */
 @media (max-width:600px){
   body{height:100dvh;min-height:100dvh;align-items:stretch}
   #wrap{width:100vw;height:100dvh;min-height:100dvh;border-radius:0}
@@ -24,37 +22,136 @@
 }
 </style></head>
 <body><main id="wrap"><canvas id="game" width="500" height="820"></canvas>
-<div class="hud"><div class="stat">SCORE<b id="score">0</b></div><div class="stat" style="text-align:right">BEST<b id="best">0</b></div></div>
-<div class="coins">🪙 <span id="coinCount">0</span></div><button class="topbtn" id="pause">Ⅱ</button>
+<div class="hud"><div class="stat">SCORE<b id="score">0</b></div><div class="stat" style="text-align:center">LEVEL<b id="level">1</b></div><div class="stat" style="text-align:right">BEST<b id="best">0</b></div></div>
+<div class="coins">🪙 <span id="coinCount">0</span><span class="comboTag" id="comboTag"></span></div>
+<div class="statusRow"><span id="shieldTag">🛡 SHIELD</span><span id="magnetTag">🧲 MAGNET</span></div>
+<div id="toast"></div>
+<button class="topbtn" id="pause">Ⅱ</button>
 <div class="barbox">NITRO<div class="bar"><i id="nitro"></i></div></div>
 <div class="controls"><button class="control boost" id="boost">BOOST!</button></div>
 <div id="overlay"><div id="panel"></div></div></main>
 <script>
-const cv=document.getElementById('game'),x=cv.getContext('2d'),W=cv.width,H=cv.height,road={x:66,w:368};
-const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),coinEl=document.getElementById('coinCount'),nitroEl=document.getElementById('nitro'),overlay=document.getElementById('overlay'),panel=document.getElementById('panel');
-let active=false,paused=false,last=0,score=0,coins=0,nitro=100,speed=6,offset=0,spawn=0,pickupSpawn=0,checkpoint=1000,level=1,weather='night',difficulty='normal',carType=0,traffic=[],pickups=[],particles=[],keys={},audioCtx,musicTimer,musicStep=0;
+const cv=document.getElementById('game'),x=cv.getContext('2d',{alpha:false}),W=cv.width,H=cv.height,road={x:66,w:368};
+const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),levelEl=document.getElementById('level'),coinEl=document.getElementById('coinCount'),comboTag=document.getElementById('comboTag'),shieldTag=document.getElementById('shieldTag'),magnetTag=document.getElementById('magnetTag'),toast=document.getElementById('toast'),nitroEl=document.getElementById('nitro'),overlay=document.getElementById('overlay'),panel=document.getElementById('panel');
+let active=false,paused=false,last=0,score=0,coins=0,nitro=100,speed=6,offset=0,spawn=0,pickupSpawn=0,obstacleSpawn=0,checkpoint=1000,level=1,weather='night',difficulty='normal',carType=0,traffic=[],pickups=[],obstacles=[],particles=[],keys={},shieldTime=0,magnetTime=0,slipTimer=0,comboCount=0,comboTimer=0,shake=0,toastTimer,audioCtx,musicTimer,musicStep=0;
 let best=+localStorage.getItem('neonRushBest')||0;bestEl.textContent=best;
 const types=[{name:'FRED CAR',color:'#35eaff',handling:1.18,top:1},{name:'INNO CAR',color:'#ff527e',handling:1,top:1.18},{name:'KAPE CHISO CAR',color:'#b375ff',handling:1.08,top:1.08}];
 const player={x:W/2-24,y:H-170,w:48,h:92,tilt:0};
+const pickupStyle={coin:{glow:'#ffe360',fill:'#ffd837',label:'$'},nitro:{glow:'#a367ff',fill:'#b47aff',label:'N'},shield:{glow:'#57ffb0',fill:'#3be89b',label:'S'},magnet:{glow:'#ff8ad1',fill:'#ff6bc4',label:'M'}};
 function sound(f,d=.08,v=.05){try{audioCtx=audioCtx||new AudioContext();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;g.gain.value=v;g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}catch(e){}}
+function buzz(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),1700)}
 function musicNote(f,d,v,type){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}
 function startMusic(){try{audioCtx=audioCtx||new AudioContext();audioCtx.resume();clearInterval(musicTimer);musicStep=0;let bass=[110,110,146.83,98,110,110,164.81,98],lead=[440,523.25,587.33,659.25,587.33,523.25,440,392];musicTimer=setInterval(()=>{if(!active||paused)return;musicNote(bass[musicStep],.21,.055,'sawtooth');if(musicStep%2===0)musicNote(lead[musicStep],.16,.025,'square');if(musicStep%4===0)musicNote(65,.055,.07,'triangle');musicStep=(musicStep+1)%8},240)}catch(e){}}
 function stopMusic(){clearInterval(musicTimer)}
 function rr(a,b,c,d,r){x.beginPath();x.roundRect(a,b,c,d,r)}
-function car(c,playerCar=false){x.save();x.translate(c.x+c.w/2,c.y+c.h/2);x.rotate(c.tilt||0);x.shadowBlur=playerCar?18:7;x.shadowColor=c.color;rr(-c.w/2,-c.h/2,c.w,c.h,10);x.fillStyle=c.color;x.fill();x.shadowBlur=0;rr(-c.w*.3,-c.h*.29,c.w*.6,c.h*.38,6);x.fillStyle='#172541';x.fill();x.fillStyle='#d6fbff';x.fillRect(-c.w*.27,-c.h*.33,c.w*.54,6);x.fillStyle='#fff0ed';x.fillRect(-c.w*.33,c.h*.34,10,7);x.fillRect(c.w*.13,c.h*.34,10,7);x.fillStyle='#111521';[-.56,.39].forEach(q=>{x.fillRect(c.w*q,-c.h*.29,8,c.h*.22);x.fillRect(c.w*q,c.h*.10,8,c.h*.22)});x.restore()}
-function roadDraw(){let grad=x.createLinearGradient(0,0,0,H);if(weather==='day'){grad.addColorStop(0,'#4d8ed9');grad.addColorStop(1,'#b9e4ff')}else if(weather==='rain'){grad.addColorStop(0,'#18233a');grad.addColorStop(1,'#111629')}else{grad.addColorStop(0,'#071127');grad.addColorStop(1,'#172045')}x.fillStyle=grad;x.fillRect(0,0,W,H);x.fillStyle=weather==='day'?'#629e56':'#214b3e';x.fillRect(0,0,road.x,H);x.fillRect(road.x+road.w,0,W-road.x-road.w,H);x.fillStyle='#303847';x.fillRect(road.x,0,road.w,H);for(let y=-60+offset%84;y<H;y+=84){x.fillStyle='#f5f5e8';x.fillRect(road.x+road.w/3-4,y,8,45);x.fillRect(road.x+road.w*2/3-4,y,8,45)}x.fillStyle='#ffdc57';x.fillRect(road.x+4,0,4,H);x.fillRect(road.x+road.w-8,0,4,H);if(weather==='rain'){x.strokeStyle='#bde8ff66';x.lineWidth=1;for(let i=0;i<45;i++){let yy=(i*79+offset*3)%H;x.beginPath();x.moveTo((i*47)%W,yy);x.lineTo((i*47)%W-9,yy+18);x.stroke()}}}
-function addTraffic(){let lanes=[road.x+22,road.x+road.w/3+20,road.x+road.w*2/3+18],avail=lanes.filter(z=>!traffic.some(c=>c.y<160&&Math.abs(c.x-z)<30));if(!avail.length)return;let police=score>700&&Math.random()<.13;traffic.push({x:avail[Math.random()*avail.length|0],y:-110,w:46,h:88,color:police?'#f1f4fb':['#ff4d7e','#ffc34d','#a66bff','#63e887'][Math.random()*4|0],tilt:0,police,drift:police?(Math.random()-.5)*.7:0})}
-function pickup(){let lane=road.x+34+Math.random()*(road.w-68);pickups.push({x:lane,y:-30,kind:Math.random()<.72?'coin':'nitro',r:13})}
-function drawPickups(){pickups.forEach(p=>{x.save();x.translate(p.x,p.y);x.shadowBlur=12;x.shadowColor=p.kind==='coin'?'#ffe360':'#a367ff';x.fillStyle=p.kind==='coin'?'#ffd837':'#b47aff';x.beginPath();x.arc(0,0,p.r,0,7);x.fill();x.shadowBlur=0;x.fillStyle='#fff6a6';x.font='bold 13px Arial';x.textAlign='center';x.fillText(p.kind==='coin'?'$':'N',0,5);x.restore()})}
+function car(c,playerCar=false){x.save();x.translate(c.x+c.w/2,c.y+c.h/2);x.rotate(c.tilt||0);x.shadowBlur=playerCar?18:7;x.shadowColor=c.color;rr(-c.w/2,-c.h/2,c.w,c.h,10);x.fillStyle=c.color;x.fill();x.shadowBlur=0;rr(-c.w*.3,-c.h*.29,c.w*.6,c.h*.38,6);x.fillStyle='#172541';x.fill();x.fillStyle='#d6fbff';x.fillRect(-c.w*.27,-c.h*.33,c.w*.54,6);x.fillStyle='#fff0ed';x.fillRect(-c.w*.33,c.h*.34,10,7);x.fillRect(c.w*.13,c.h*.34,10,7);x.fillStyle='#111521';[-.56,.39].forEach(q=>{x.fillRect(c.w*q,-c.h*.29,8,c.h*.22);x.fillRect(c.w*q,c.h*.10,8,c.h*.22)});x.restore();if(playerCar&&shieldTime>0){x.save();x.translate(c.x+c.w/2,c.y+c.h/2);x.strokeStyle='rgba(87,255,176,'+(0.35+0.3*Math.sin(performance.now()/110))+')';x.lineWidth=4;x.beginPath();x.arc(0,0,c.w*0.78,0,7);x.stroke();x.restore()}}
+function sceneryItem(cx,cy){if(weather==='day'){x.fillStyle='#2f6b3a';x.beginPath();x.arc(cx,cy,15,0,7);x.fill();x.fillStyle='#6b4a2f';x.fillRect(cx-4,cy+9,8,20)}else if(weather==='rain'){x.fillStyle='#1a2438';x.fillRect(cx-3,cy-30,6,50);x.globalAlpha=.5;x.fillStyle='#ffe9a3';x.beginPath();x.arc(cx,cy-32,9,0,7);x.fill();x.globalAlpha=1}else{x.fillStyle='#0d1830';x.fillRect(cx-14,cy-40,28,60);x.fillStyle='#ffd876';for(let wy=cy-34;wy<cy+14;wy+=12){x.fillRect(cx-9,wy,6,6);x.fillRect(cx+3,wy,6,6)}}}
+function scenery(){let step=140,py=(-100+offset*0.6)%step;for(let y=py-step;y<H+step;y+=step){sceneryItem(road.x-30,y);sceneryItem(road.x+road.w+30,y)}}
+function roadDraw(){let grad=x.createLinearGradient(0,0,0,H);if(weather==='day'){grad.addColorStop(0,'#4d8ed9');grad.addColorStop(1,'#b9e4ff')}else if(weather==='rain'){grad.addColorStop(0,'#18233a');grad.addColorStop(1,'#111629')}else{grad.addColorStop(0,'#071127');grad.addColorStop(1,'#172045')}x.fillStyle=grad;x.fillRect(0,0,W,H);x.fillStyle=weather==='day'?'#629e56':'#214b3e';x.fillRect(0,0,road.x,H);x.fillRect(road.x+road.w,0,W-road.x-road.w,H);scenery();x.fillStyle='#303847';x.fillRect(road.x,0,road.w,H);for(let y=-60+offset%84;y<H;y+=84){x.fillStyle='#f5f5e8';x.fillRect(road.x+road.w/3-4,y,8,45);x.fillRect(road.x+road.w*2/3-4,y,8,45)}x.fillStyle='#ffdc57';x.fillRect(road.x+4,0,4,H);x.fillRect(road.x+road.w-8,0,4,H);if(weather==='rain'){x.strokeStyle='#bde8ff66';x.lineWidth=1;for(let i=0;i<45;i++){let yy=(i*79+offset*3)%H;x.beginPath();x.moveTo((i*47)%W,yy);x.lineTo((i*47)%W-9,yy+18);x.stroke()}}}
+function headlights(){if(weather!=='night')return;x.save();let cx=player.x+player.w/2,cy=player.y;let g=x.createRadialGradient(cx,cy-60,10,cx,cy-60,150);g.addColorStop(0,'rgba(255,255,200,.30)');g.addColorStop(1,'rgba(255,255,200,0)');x.fillStyle=g;x.beginPath();x.moveTo(player.x+8,player.y+6);x.lineTo(player.x-34,player.y-170);x.lineTo(player.x+player.w+34,player.y-170);x.lineTo(player.x+player.w-8,player.y+6);x.closePath();x.fill();x.restore()}
+function addTraffic(){let lanes=[road.x+22,road.x+road.w/3+20,road.x+road.w*2/3+18],avail=lanes.filter(z=>!traffic.some(c=>c.y<160&&Math.abs(c.x-z)<30));if(!avail.length)return;let police=score>700&&Math.random()<.13;traffic.push({x:avail[Math.random()*avail.length|0],y:-110,w:46,h:88,color:police?'#f1f4fb':['#ff4d7e','#ffc34d','#a66bff','#63e887'][Math.random()*4|0],tilt:0,police,drift:police?(Math.random()-.5)*.7:0,passed:false})}
+function addObstacle(){let lanes=[road.x+30,road.x+road.w/2-16,road.x+road.w-62];if(obstacles.some(o=>o.y<160))return;let lane=lanes[Math.random()*lanes.length|0];let kind=Math.random()<0.55?'cone':'oil';obstacles.push({x:lane,y:-90,w:32,h:kind==='cone'?34:20,kind})}
+function pickup(){let lane=road.x+34+Math.random()*(road.w-68);let r=Math.random(),kind=r<0.62?'coin':r<0.82?'nitro':r<0.91?'shield':'magnet';pickups.push({x:lane,y:-30,kind,r:13})}
+function drawPickups(){pickups.forEach(p=>{let st=pickupStyle[p.kind];x.save();x.translate(p.x,p.y);x.shadowBlur=12;x.shadowColor=st.glow;x.fillStyle=st.fill;x.beginPath();x.arc(0,0,p.r,0,7);x.fill();x.shadowBlur=0;x.fillStyle='#0c1526';x.font='bold 13px Arial';x.textAlign='center';x.fillText(st.label,0,5);x.restore()})}
+function drawObstacles(){obstacles.forEach(o=>{if(o.kind==='cone'){x.fillStyle='#ff8a2b';x.beginPath();x.moveTo(o.x+o.w/2,o.y);x.lineTo(o.x+o.w,o.y+o.h);x.lineTo(o.x,o.y+o.h);x.closePath();x.fill();x.fillStyle='#fff';x.fillRect(o.x+6,o.y+o.h*.55,o.w-12,4)}else{x.fillStyle='rgba(20,20,30,.55)';x.beginPath();x.ellipse(o.x+o.w/2,o.y+o.h/2,o.w/2,o.h/3,0,0,7);x.fill()}})}
 function hit(a,b){return a.x+8<b.x+b.w-8&&a.x+a.w-8>b.x+8&&a.y+10<b.y+b.h-10&&a.y+a.h-10>b.y+10}
 function burst(px,py,col){for(let i=0;i<24;i++)particles.push({x:px,y:py,vx:(Math.random()-.5)*11,vy:(Math.random()-.5)*11,life:28,c:col})}
-function crash(){active=false;stopMusic();sound(80,.35,.13);burst(player.x+24,player.y+40,'#ffba4b');if(score>best){best=Math.floor(score);localStorage.setItem('neonRushBest',best)}bestEl.textContent=best;showEnd('CRASHED!','Final score: '+Math.floor(score)+' · Coins: '+coins)}
+function crash(){active=false;stopMusic();sound(80,.35,.13);shake=18;buzz(120);burst(player.x+24,player.y+40,'#ffba4b');if(score>best){best=Math.floor(score);localStorage.setItem('neonRushBest',best)}bestEl.textContent=best;showEnd('CRASHED!','Final score: '+Math.floor(score)+' · Coins: '+coins)}
 function showEnd(title,text){overlay.style.display='grid';panel.innerHTML='<h1>'+title+'</h1><p>'+text+'</p><button class="main" id="again">RACE AGAIN</button><div class="small">Your high score is saved on this device.</div>';document.getElementById('again').onclick=menu}
-function update(dt){let f=dt/16.67,t=types[carType],boosting=keys.boost&&nitro>0;let steer=7.3*t.handling*f;if(keys.left)player.x-=steer;if(keys.right)player.x+=steer;player.x=Math.max(road.x+8,Math.min(road.x+road.w-player.w-8,player.x));player.tilt=keys.left?-.11:keys.right?.11:0;let max=15*t.top;speed=Math.min(max,6+score/500)+(boosting?4:0);if(boosting){nitro=Math.max(0,nitro-.65*f);if(Math.random()<.25)particles.push({x:player.x+24,y:player.y+90,vx:(Math.random()-.5)*2,vy:4,life:12,c:'#a66bff'})}else nitro=Math.min(100,nitro+.05*f);offset+=speed*f;spawn+=dt;let gap=difficulty==='easy'?850:difficulty==='hard'?440:620;if(spawn>Math.max(300,gap-score*.12)){addTraffic();spawn=0}pickupSpawn+=dt;if(pickupSpawn>1200){pickup();pickupSpawn=0}traffic.forEach(c=>{c.y+=speed*f*(c.police?1.15:1);c.x+=c.drift*f});pickups.forEach(p=>p.y+=speed*f);traffic=traffic.filter(c=>c.y<H+120);pickups=pickups.filter(p=>p.y<H+40);for(let c of traffic)if(hit(player,c)){crash();break}pickups=pickups.filter(p=>{let q={x:p.x-p.r,y:p.y-p.r,w:p.r*2,h:p.r*2};if(hit(player,q)){if(p.kind==='coin'){coins++;score+=50;sound(760,.06)}else{nitro=Math.min(100,nitro+32);sound(330,.12)}return false}return true});score+=speed*f*.14;if(score>checkpoint){level++;checkpoint+=1000;weather=['night','day','rain'][level%3];score+=150;sound(520,.25,.1)}scoreEl.textContent=Math.floor(score);coinEl.textContent=coins;nitroEl.style.width=nitro+'%'}
-function render(){roadDraw();pickups.forEach(()=>{});drawPickups();traffic.forEach(c=>{car(c);if(c.police){x.fillStyle='#ff3344';x.fillRect(c.x+5,c.y+4,16,4);x.fillStyle='#52cfff';x.fillRect(c.x+25,c.y+4,16,4)}});car({x:player.x,y:player.y,w:player.w,h:player.h,tilt:player.tilt,color:types[carType].color},true);particles=particles.filter(p=>{x.fillStyle=p.c;x.fillRect(p.x,p.y,4,4);p.x+=p.vx;p.y+=p.vy;p.vy+=.18;return --p.life>0})}
+function update(dt){
+  let f=dt/16.67,t=types[carType],boosting=keys.boost&&nitro>0;
+  if(comboTimer>0){comboTimer-=dt;if(comboTimer<=0)comboCount=0}
+  if(shieldTime>0)shieldTime=Math.max(0,shieldTime-dt);
+  if(magnetTime>0)magnetTime=Math.max(0,magnetTime-dt);
+  if(slipTimer>0)slipTimer=Math.max(0,slipTimer-dt);
+  let slip=slipTimer>0?0.4:1;
+  let steer=7.3*t.handling*f*slip;
+  if(keys.left)player.x-=steer;if(keys.right)player.x+=steer;
+  if(slipTimer>0)player.x+=Math.sin(performance.now()/45)*1.4*f;
+  player.x=Math.max(road.x+8,Math.min(road.x+road.w-player.w-8,player.x));
+  player.tilt=keys.left?-.11:keys.right?.11:0;
+  let max=15*t.top;speed=Math.min(max,6+score/500)+(boosting?4:0);
+  if(boosting){nitro=Math.max(0,nitro-.65*f);if(Math.random()<.25)particles.push({x:player.x+24,y:player.y+90,vx:(Math.random()-.5)*2,vy:4,life:12,c:'#a66bff'})}else nitro=Math.min(100,nitro+.05*f);
+  offset+=speed*f;
+  spawn+=dt;let baseGap=difficulty==='easy'?900:difficulty==='hard'?480:650;let gap=Math.max(260,baseGap-score*0.09-level*20)*(0.85+Math.random()*0.3);
+  if(spawn>gap){addTraffic();spawn=0}
+  pickupSpawn+=dt;if(pickupSpawn>1200){pickup();pickupSpawn=0}
+  obstacleSpawn+=dt;if(obstacleSpawn>2200&&score>200){addObstacle();obstacleSpawn=0}
+  traffic.forEach(c=>{
+    c.y+=speed*f*(c.police?1.15:1);c.x+=c.drift*f;
+    if(!c.passed&&c.y>player.y+player.h*0.5){
+      c.passed=true;
+      let dist=Math.abs((c.x+c.w/2)-(player.x+player.w/2));
+      if(dist<70){comboCount++;comboTimer=2600;score+=comboCount*8;sound(600+comboCount*20,.05,.04)}
+    }
+  });
+  obstacles.forEach(o=>o.y+=speed*f);
+  pickups.forEach(p=>p.y+=speed*f);
+  if(magnetTime>0){pickups.forEach(p=>{if(p.kind==='coin'){let dx=(player.x+player.w/2)-p.x,dy=(player.y+player.h/2)-p.y,dist=Math.hypot(dx,dy)||1;if(dist<190){p.x+=dx/dist*6*f;p.y+=dy/dist*6*f}}})}
+  traffic=traffic.filter(c=>c.y<H+120);
+  obstacles=obstacles.filter(o=>o.y<H+50);
+  pickups=pickups.filter(p=>p.y<H+40);
+  for(let i=0;i<traffic.length;i++){
+    let c=traffic[i];
+    if(hit(player,c)){
+      if(shieldTime>0){burst(c.x+c.w/2,c.y+c.h/2,c.color);sound(300,.1,.08);score+=30;traffic.splice(i,1);shieldTime=Math.max(0,shieldTime-1500)}
+      else{crash()}
+      break;
+    }
+  }
+  obstacles=obstacles.filter(o=>{
+    if(hit(player,o)){
+      if(o.kind==='cone'){score=Math.max(0,score-80);shake=Math.max(shake,10);sound(160,.15);buzz(50)}
+      else{slipTimer=900;shake=Math.max(shake,5);sound(220,.12)}
+      return false;
+    }
+    return true;
+  });
+  pickups=pickups.filter(p=>{
+    let q={x:p.x-p.r,y:p.y-p.r,w:p.r*2,h:p.r*2};
+    if(hit(player,q)){
+      if(p.kind==='coin'){coins++;score+=50;sound(760,.06)}
+      else if(p.kind==='nitro'){nitro=Math.min(100,nitro+32);sound(330,.12)}
+      else if(p.kind==='shield'){shieldTime=Math.min(9000,shieldTime+5500);sound(500,.15,.06);showToast('SHIELD ON')}
+      else if(p.kind==='magnet'){magnetTime=Math.min(9000,magnetTime+6000);sound(880,.1,.05);showToast('MAGNET ON')}
+      buzz(20);
+      return false;
+    }
+    return true;
+  });
+  score+=speed*f*.14;
+  if(score>checkpoint){level++;checkpoint+=1000;weather=['night','day','rain'][level%3];score+=150;sound(520,.25,.1);showToast('LEVEL '+level+' · '+weather.toUpperCase())}
+  scoreEl.textContent=Math.floor(score);levelEl.textContent=level;coinEl.textContent=coins;nitroEl.style.width=nitro+'%';
+  shieldTag.style.display=shieldTime>0?'inline-block':'none';
+  magnetTag.style.display=magnetTime>0?'inline-block':'none';
+  if(comboCount>1){comboTag.style.display='inline-block';comboTag.textContent='x'+comboCount+' COMBO'}else comboTag.style.display='none';
+}
+function render(){
+  x.save();
+  if(shake>0){x.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);shake*=0.88;if(shake<0.5)shake=0}
+  roadDraw();
+  headlights();
+  drawPickups();
+  drawObstacles();
+  traffic.forEach(c=>{car(c);if(c.police){x.fillStyle='#ff3344';x.fillRect(c.x+5,c.y+4,16,4);x.fillStyle='#52cfff';x.fillRect(c.x+25,c.y+4,16,4)}});
+  car({x:player.x,y:player.y,w:player.w,h:player.h,tilt:player.tilt,color:types[carType].color},true);
+  particles=particles.filter(p=>{x.fillStyle=p.c;x.fillRect(p.x,p.y,4,4);p.x+=p.vx;p.y+=p.vy;p.vy+=.18;return --p.life>0});
+  x.restore();
+}
 function frame(now){let dt=Math.min(40,now-last||16);last=now;if(active&&!paused)update(dt);render();requestAnimationFrame(frame)}
-function race(){score=0;coins=0;nitro=100;speed=6;offset=0;traffic=[];pickups=[];particles=[];checkpoint=1000;level=1;weather='night';player.x=W/2-24;active=true;paused=false;overlay.style.display='none';document.getElementById('pause').textContent='Ⅱ';startMusic()}
-function menu(){active=false;paused=false;stopMusic();overlay.style.display='grid';let cards=types.map((t,i)=>'<button class="choice '+(i===carType?'selected':'')+'" data-car="'+i+'" style="border-color:'+(i===carType?t.color:'#ffffff55')+'">'+t.name+'<span>Speed '+(i===1?'+++':i===2?'++':'+')+'<br>Handling '+(i===0?'+++':i===2?'++':'+')+'</span></button>').join('');panel.innerHTML='<h1>TECHNINJA<br>RACING GAME</h1><p>Collect coins, use nitro, and outrun traffic. Weather shifts every checkpoint.</p><div class="choices">'+cards+'</div><div class="choices"><button class="choice '+(difficulty==='easy'?'selected':'')+'" data-diff="easy">EASY</button><button class="choice '+(difficulty==='normal'?'selected':'')+'" data-diff="normal">NORMAL</button><button class="choice '+(difficulty==='hard'?'selected':'')+'" data-diff="hard">HARD</button></div><button class="main" id="start">START RACE</button><div class="small">Tap ← → to steer · Hold NITRO to boost · Best: '+best+'</div><div class="credit">Developed by Lorgodan (Techninja)</div>';document.querySelectorAll('[data-car]').forEach(b=>b.onclick=()=>{carType=+b.dataset.car;menu()});document.querySelectorAll('[data-diff]').forEach(b=>b.onclick=()=>{difficulty=b.dataset.diff;menu()});document.getElementById('start').onclick=race}
+function race(){score=0;coins=0;nitro=100;speed=6;offset=0;traffic=[];pickups=[];obstacles=[];particles=[];checkpoint=1000;level=1;weather='night';shieldTime=0;magnetTime=0;slipTimer=0;comboCount=0;comboTimer=0;shake=0;spawn=0;pickupSpawn=0;obstacleSpawn=0;player.x=W/2-24;active=true;paused=false;overlay.style.display='none';document.getElementById('pause').textContent='Ⅱ';startMusic()}
+function menu(){active=false;paused=false;stopMusic();overlay.style.display='grid';let cards=types.map((t,i)=>'<button class="choice '+(i===carType?'selected':'')+'" data-car="'+i+'" style="border-color:'+(i===carType?t.color:'#ffffff55')+'">'+t.name+'<span>Speed '+(i===1?'+++':i===2?'++':'+')+'<br>Handling '+(i===0?'+++':i===2?'++':'+')+'</span></button>').join('');panel.innerHTML='<h1>TECHNINJA<br>RACING GAME</h1><p>Collect coins, dodge cones and oil slicks, chain near-misses for combo bonus, and grab shield &amp; magnet power-ups. Weather shifts every checkpoint.</p><div class="choices">'+cards+'</div><div class="choices"><button class="choice '+(difficulty==='easy'?'selected':'')+'" data-diff="easy">EASY</button><button class="choice '+(difficulty==='normal'?'selected':'')+'" data-diff="normal">NORMAL</button><button class="choice '+(difficulty==='hard'?'selected':'')+'" data-diff="hard">HARD</button></div><button class="main" id="start">START RACE</button><div class="small">Drag anywhere to steer · Hold NITRO to boost · Best: '+best+'</div><div class="credit">Developed by Lorgodan (Techninja)</div>';document.querySelectorAll('[data-car]').forEach(b=>b.onclick=()=>{carType=+b.dataset.car;menu()});document.querySelectorAll('[data-diff]').forEach(b=>b.onclick=()=>{difficulty=b.dataset.diff;menu()});document.getElementById('start').onclick=race}
 function press(id,key){let b=document.getElementById(id);['pointerdown','pointerenter'].forEach(e=>b.addEventListener(e,z=>{if(e==='pointerenter'&&!z.buttons)return;keys[key]=true;z.preventDefault()}));['pointerup','pointercancel','pointerleave'].forEach(e=>b.addEventListener(e,()=>keys[key]=false))}
-press('boost','boost');function touchSteer(e){if(!active||paused)return;let r=cv.getBoundingClientRect(),point=e.touches?e.touches[0]:e;let target=(point.clientX-r.left)/r.width*W-player.w/2;player.x=Math.max(road.x+8,Math.min(road.x+road.w-player.w-8,target));e.preventDefault()}cv.addEventListener('pointerdown',touchSteer);cv.addEventListener('pointermove',e=>{if(e.buttons)touchSteer(e)});cv.addEventListener('touchstart',touchSteer,{passive:false});cv.addEventListener('touchmove',touchSteer,{passive:false});window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.left=true;if(e.key==='ArrowRight'||e.key==='d')keys.right=true;if(e.code==='Space')keys.boost=true});window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.left=false;if(e.key==='ArrowRight'||e.key==='d')keys.right=false;if(e.code==='Space')keys.boost=false});document.getElementById('pause').onclick=()=>{if(!active)return;paused=!paused;document.getElementById('pause').textContent=paused?'▶':'Ⅱ';if(paused){overlay.style.display='grid';panel.innerHTML='<h1>PAUSED</h1><button class="main" id="resume">RESUME</button>';document.getElementById('resume').onclick=()=>{paused=false;overlay.style.display='none';document.getElementById('pause').textContent='Ⅱ'}}};menu();requestAnimationFrame(frame);
+press('boost','boost');
+let dragStartX=null,dragOriginPX=null;
+function steerStart(e){if(!active||paused)return;let point=e.touches?e.touches[0]:e;dragStartX=point.clientX;dragOriginPX=player.x;e.preventDefault()}
+function steerMove(e){if(!active||paused||dragStartX===null)return;let point=e.touches?e.touches[0]:e;let r=cv.getBoundingClientRect(),scale=W/r.width;let dx=(point.clientX-dragStartX)*scale;player.x=Math.max(road.x+8,Math.min(road.x+road.w-player.w-8,dragOriginPX+dx));e.preventDefault()}
+function steerEnd(){dragStartX=null}
+cv.addEventListener('pointerdown',steerStart);cv.addEventListener('pointermove',steerMove);cv.addEventListener('pointerup',steerEnd);cv.addEventListener('pointercancel',steerEnd);
+cv.addEventListener('touchstart',steerStart,{passive:false});cv.addEventListener('touchmove',steerMove,{passive:false});cv.addEventListener('touchend',steerEnd);
+window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.left=true;if(e.key==='ArrowRight'||e.key==='d')keys.right=true;if(e.code==='Space')keys.boost=true});
+window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.left=false;if(e.key==='ArrowRight'||e.key==='d')keys.right=false;if(e.code==='Space')keys.boost=false});
+document.getElementById('pause').onclick=()=>{if(!active)return;paused=!paused;document.getElementById('pause').textContent=paused?'▶':'Ⅱ';if(paused){overlay.style.display='grid';panel.innerHTML='<h1>PAUSED</h1><button class="main" id="resume">RESUME</button>';document.getElementById('resume').onclick=()=>{paused=false;overlay.style.display='none';document.getElementById('pause').textContent='Ⅱ'}}};
+menu();requestAnimationFrame(frame);
 </script></body></html>
